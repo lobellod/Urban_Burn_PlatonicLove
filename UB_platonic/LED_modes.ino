@@ -6,7 +6,6 @@ void RGB_unsync(){
     RGB_blink(&leds_2[0], NUM_LEDS_2);
   }
 }
-
 /*
 //Program som fadear mellan RGB osynkat över hatten/stjälken
 void topBottomFade(){

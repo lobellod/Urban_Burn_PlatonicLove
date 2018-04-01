@@ -47,7 +47,6 @@ void setup() {
   FastLED.addLeds<LED_TYPE, LED_PIN1, COLOR_ORDER>(leds_1, NUM_LEDS_1).setCorrection( TypicalLEDStrip );
   FastLED.addLeds<LED_TYPE, LED_PIN2, COLOR_ORDER>(leds_2, NUM_LEDS_2).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(  BRIGHTNESS );
-
   currentBlending = LINEARBLEND;
 
   fill_solid( leds_1, NUM_LEDS_1, CRGB::Red);
