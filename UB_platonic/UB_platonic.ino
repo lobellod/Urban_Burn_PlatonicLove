@@ -6,8 +6,8 @@
 
 #define LED_PIN1     3
 #define LED_PIN2     4
-#define NUM_STICKS_1    3
-#define NUM_STICKS_2    2
+#define NUM_STICKS_1    30
+#define NUM_STICKS_2    12
 #define NUM_LEDS      30
 #define NUM_LEDS_1   NUM_STICKS_1*NUM_LEDS
 #define NUM_LEDS_2   NUM_STICKS_2*NUM_LEDS
@@ -25,7 +25,7 @@ TBlendType    currentBlending;
 
 uint8_t startIndex = 0;
 uint8_t hue = 0;
-
+int toggle = 0;
 uint16_t tdelay = 50;
 
 unsigned long pre_time = 0;
@@ -64,7 +64,12 @@ void loop() {
     startIndex = startIndex + 1;
     hue = hue + 1;
   }
-  RGB_unsync();
+  EVERY_N_MILLISECONDS(20000){
+    toggle = random(4);
+  }
+
+  unsyncFadeSinStick(toggle);
+  //RGB_unsync();
   //topBottomFadewSinelonwGlitter(NUM_LEDS_1, NUM_LEDS_2);
 /*  EVERY_N_MILLISECONDS(5507){
     target_color = RGB_array[J%3];

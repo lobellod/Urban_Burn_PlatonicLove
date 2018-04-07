@@ -125,3 +125,10 @@ void sinelon(CRGB *leds_p, CRGB targetColor, int mins, int maxs)
   int pos = beatsin16(13,mins,maxs);
   leds_p[pos] = targetColor;
 }
+
+void sinelonStick(CRGB *leds_p, CRGB targetColor, int num_sticks)
+{
+  int pos = beatsin16(13,0,9);
+  for(int I=0;I<num_sticks;I++){
+  leds_p[pos+(I*10)] = targetColor;}
+}
