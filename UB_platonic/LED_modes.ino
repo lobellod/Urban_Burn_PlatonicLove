@@ -1,10 +1,14 @@
 void RGB_unsync(){
-  EVERY_N_MILLISECONDS(1100){
-    RGB_blink(&leds_1[0], NUM_LEDS_1);
+  static int g;
+  static int h;
+  EVERY_N_MILLISECONDS(2300){
+    g++;
   }
-  EVERY_N_MILLISECONDS(1750){
-    RGB_blink(&leds_2[0], NUM_LEDS_2);
+  EVERY_N_MILLISECONDS(1150){
+    h++;
   }
+  fill_solid(leds_p,num_leds,RGB_array[g%3]);
+  fill_solid(leds_p,num_leds,RGB_array[h%3]);
 }
 
 void unsyncFadeSinStick(int toggle){
@@ -29,6 +33,39 @@ void unsyncFadeSinStick(int toggle){
     }
   }
 }
+
+void twoColorChase(){
+  static uint8_t Index = 0;
+  EVERY_N_MILLISECONDS(70){
+  Index += beatsin8(3, 1, 3);
+  } 
+  FillLEDsFromPaletteColors(&leds_1[0], NUM_LEDS_1, Index);
+  FillLEDsFromPaletteColors(&leds_2[0], NUM_LEDS_2, Index);
+}
+
+void fullFadeChase(){
+  static int next = 0;
+  static int toggleSwitch = 1;
+  static CRGB fadeToThis = CHSV(255,255,255);
+  EVERY_N_MILLISECONDS(5000){
+    if(toggleSwitch==0){
+        next = (next+1)%2;
+    } 
+    if (toggleSwitch==1){ 
+        fadeToThis = CHSV(random(256),255,255);
+    }
+    toggleSwitch = (toggleSwitch+1)%2;
+  }
+  
+  EVERY_N_MILLISECONDS(50){
+  if (next==0){
+     fadeToColor(&leds_1[0], fadeToThis, 2, NUM_LEDS_1);
+  }
+  else if (next==1){
+      fadeToColor(&leds_2[0], fadeToThis, 2, NUM_LEDS_2);
+  }
+}
+}
 /*
 //Program som fadear mellan RGB osynkat över hatten/stjälken
 void topBottomFade(){
@@ -51,104 +88,4 @@ void topBottomFade(){
   }
 }
 
-void topBottomFadewGlitter(int top_start, int top_end){
-  static int J = 0;
-  static int I = 0;
-  EVERY_N_MILLISECONDS(5507){
-    target_color = RGB_array[J%3];
-    J++;
-  }
-  EVERY_N_MILLISECONDS(4370){
-    target_color2 = RGB_array[I%3];
-    I++;
-  }
-  
-  EVERY_N_MILLISECONDS(50) {
-    fadeToColor_interval(&leds[0], target_color, 5,0,top_start);
-    fadeToColor_interval(&leds[0], target_color2, 8, top_start, top_end);
-    fadeToColor_interval(&leds[0], target_color, 5,top_end,NUM_LEDS);
-
-  }
-   EVERY_N_MILLISECONDS(40) {
-    addGlitter(200, top_start, top_end);
-  }
-}
-
-
-void topBottomFadewConfetti(int top_start, int top_end){
-  static int J = 0;
-  static int I = 0;
-  EVERY_N_MILLISECONDS(5507){
-    target_color = RGB_array[J%3];
-    J++;
-  }
-  EVERY_N_MILLISECONDS(4370){
-    target_color2 = RGB_array[I%3];
-    I++;
-  }
-  
-  EVERY_N_MILLISECONDS(50) {
-    fadeToColor_interval(&leds[0], target_color, 5,0,top_start);
-    fadeToColor_interval(&leds[0], target_color2, 8, top_start, top_end);
-    fadeToColor_interval(&leds[0], target_color, 5,top_end,NUM_LEDS);
-
-  }
-   EVERY_N_MILLISECONDS(40) {
-    confetti(top_start, top_end);
-  }
-}
-
-
-void topBottomFadewSinelon(int top_start, int top_end){
-  static int J = 0;
-  static int I = 0;
-  EVERY_N_MILLISECONDS(5507){
-    target_color = RGB_arrayplus[J%3];
-    J++;
-  }
-  EVERY_N_MILLISECONDS(4370){
-    target_color2 = RGB_array[I%3];
-    target_color3 = RGB_array[(I+1)%3];
-    I++;
-  }
-  
-  
-  EVERY_N_MILLISECONDS(50) {
-    fadeToColor_interval(&leds[0], target_color, 5,0,top_start);
-    fadeToColor_interval(&leds[0], target_color2, 8, top_start, top_end);
-    fadeToColor_interval(&leds[0], target_color, 5,top_end,NUM_LEDS);
-
-  }
-   EVERY_N_MILLISECONDS(40) {
-    sinelon(target_color3, top_start, top_end);
-  }
-}
-
-
-void topBottomFadewSinelonwGlitter(int top_start, int top_end){
-  static int J = 0;
-  static int I = 0;
-  EVERY_N_MILLISECONDS(5507){
-    target_color = RGB_arrayplus[J%3];
-    J++;
-  }
-  EVERY_N_MILLISECONDS(4370){
-    target_color2 = RGB_array[I%3];
-    target_color3 = RGB_array[(I+1)%3];
-    I++;
-  }
-  
-  
-  EVERY_N_MILLISECONDS(50) {
-    fadeToColor_interval(&leds[0], target_color, 5,0,top_start);
-    fadeToColor_interval(&leds[0], target_color2, 8, top_start, top_end);
-    fadeToColor_interval(&leds[0], target_color, 5,top_end,NUM_LEDS);
-
-  }
-   EVERY_N_MILLISECONDS(60) {
-    sinelon(target_color3, top_start, top_end);
-  }
-  EVERY_N_MILLISECONDS(40) {
-    addGlitter(150, top_start, top_end);
-  }
-}*/
+*/

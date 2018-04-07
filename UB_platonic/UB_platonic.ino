@@ -18,14 +18,15 @@
 
 CRGB leds_1[NUM_LEDS_1];
 CRGB leds_2[NUM_LEDS_2];
-//CRGB *leds_p = &leds;
-CRGBPalette16 currentPalette;
+
+CRGBPalette16 currentPalette; 
 TBlendType    currentBlending;
 
 
 uint8_t startIndex = 0;
 uint8_t hue = 0;
 int toggle = 0;
+int mode = 1;
 uint16_t tdelay = 50;
 
 unsigned long pre_time = 0;
@@ -37,9 +38,6 @@ CRGB RGB_array[3] = {CRGB::Red, CRGB::Green, CRGB::Blue};
 CRGB RGB_arrayplus[6] = {CRGB::Red, CRGB::Green, CRGB::Blue, CRGB::DarkOliveGreen, CRGB::DarkMagenta, CRGB::Fuchsia};
 //-----------------------------------------
 
-CRGB target_color = CRGB::HotPink;
-CRGB target_color2 = CRGB::Blue;
-CRGB target_color3 = CRGB::Red;
 
 void setup() {
   delay(1000);
@@ -48,7 +46,7 @@ void setup() {
   FastLED.addLeds<LED_TYPE, LED_PIN2, COLOR_ORDER>(leds_2, NUM_LEDS_2).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(  BRIGHTNESS );
   currentBlending = LINEARBLEND;
-
+  currentPalette = ReturnNewPalette(hue);
   fill_solid( leds_1, NUM_LEDS_1, CRGB::Red);
   fill_solid( leds_2, NUM_LEDS_2, CRGB::Green);
   FastLED.show();
@@ -61,14 +59,29 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   EVERY_N_MILLISECONDS(100) {
-    startIndex = startIndex + 1;
     hue = hue + 1;
   }
   EVERY_N_MILLISECONDS(20000){
     toggle = random(4);
   }
 
-  unsyncFadeSinStick(toggle);
+  EVERY_N_MILLISECONDS(120000){
+    mode = random(1,4);
+  }
+switch (mode) {
+  
+  case 1:
+    unsyncFadeSinStick(toggle);
+  break;
+
+  case 2:
+    twoColorChase();
+  break;
+
+  case 3:
+    fullFadeChase();
+    break;
+}
   //RGB_unsync();
   //topBottomFadewSinelonwGlitter(NUM_LEDS_1, NUM_LEDS_2);
 /*  EVERY_N_MILLISECONDS(5507){

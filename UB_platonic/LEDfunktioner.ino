@@ -1,25 +1,27 @@
-/*//Tar "startindex" och ljusstyrka och uppdaterar slingan
-void FillLEDsFromPaletteColors( uint8_t colorIndex, uint8_t brightness)
+//Tar "startindex" och ljusstyrka och uppdaterar slingan
+void FillLEDsFromPaletteColors(CRGB *leds_p, int num_leds, uint8_t colorIndex)
 {    
-    for( int i = 0; i < NUM_LEDS; i++) {
-        leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
-        colorIndex += 3;
+    currentPalette = ReturnNewPalette(hue);
+    for( int i = 0; i < num_leds; i++) {
+        leds_p[i] = ColorFromPalette( currentPalette, colorIndex, BRIGHTNESS, currentBlending);
+        colorIndex += 1;
     }
 }
 
-//Skapar en palett med två olika färger, tar "Hue" från gyrot och skapar de två färgerna med en offset på 128
-void ReturnNewPalette(uint8_t Hue){
+
+CRGBPalette16 ReturnNewPalette(uint8_t Hue){
     uint8_t  Hue1 = Hue;
     uint8_t  Hue2 = Hue + 128;
     CRGB color1 = CHSV( Hue1, 255, 255);
     CRGB color2  = CHSV( Hue2, 255, 255);
     CRGB black  = CRGB::Black;
     
-    currentPalette = CRGBPalette16(
-                                   color1,   color1,  color2, color2,
-                                   color1, color1, color2,  color2,
-                                   color1,  color1,  color2,  color2,
-                                   color1, color1, color2,  color2 );
+    CRGBPalette16    returnPalette = CRGBPalette16(
+                                   color1,   color2,  color1, color2,
+                                   color1, color2, color1,  color2,
+                                   color1,  color2,  color1,  color2,
+                                   color1, color2, color1,  color2 );
+   return returnPalette;
 }
 
 
@@ -27,7 +29,7 @@ void ReturnNewPalette(uint8_t Hue){
 
 
 
-void twoColorTrace(uint8_t startIndex, uint8_t hue){
+/*void twoColorTrace(uint8_t startIndex, uint8_t hue){
     ReturnNewPalette(hue);
     uint8_t brightness = 255;
     FillLEDsFromPaletteColors(startIndex, brightness);
@@ -50,7 +52,7 @@ void cycleColorArray(CRGB *leds_p, CRGB *color_Array, int arrayLength, int num_l
 
 
 void fadeToColor( CRGB *leds_p, CRGB fadeIntoRGB, uint8_t fadeVal, int num_leds){
-  for(int i;i<num_leds;i++){
+  for(int i=0;i<num_leds;i++){
     if(leds_p[i].r<fadeIntoRGB.r){
       leds_p[i] += CRGB( fadeVal, 0 ,0);
       leds_p[i] &= CRGB( fadeIntoRGB.r, 255, 255);
